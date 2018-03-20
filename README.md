@@ -2,6 +2,12 @@
 
 PTPFreeleech is a Node.js script that checks currently available PassThePopcorn freeleech torrents and runs a few checks against them. If the checks pass, the torrent's information is logged to the console and (optionally) auto-downloaded or logged to a Discord webhook.
 
+## Features
+
+* Automatically download freeleech torrents to a specified path.
+* Log freeleech torrent information to Discord in a pleasing format.
+* Restrict search parameters using provided criteria & filters.
+
 ## Installation
 
 ### Preprequistes
