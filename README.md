@@ -42,7 +42,7 @@ Below is an example `config.example.json`. Rename `config.example.json` to `conf
 
 ## Usage
 
-To start the script, run the following command.
+To start the script, run the following command within the script's working directory.
 
 ```bash
 $ npm run start # Run if using npm.
