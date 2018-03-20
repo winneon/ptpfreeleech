@@ -24,7 +24,7 @@ $ yarn install # Run if using yarn.
 
 Below is an example `config.example.json`. Rename `config.example.json` to `config.json` and edit the required values to your needs.
 
-```json
+```javascript
 {
   "username": "", // PassThePopcorn username credential.
   "password": "", // PassThePopcorn password credential.
