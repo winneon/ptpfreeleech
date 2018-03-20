@@ -1,0 +1,13 @@
+{
+  "username": "", // PassThePopcorn username credential.
+  "password": "", // PassThePopcorn password credential.
+  "passkey": "", // PassThePopcorn passkey credential. View on your profile in the Personal section.
+  "minseeders": -1, // Minimum amount of seeders. Set to -1 for unlimited.
+  "maxseeders": -1, // Maximum amount of seeders. Set to -1 for unlimited.
+  "minleechers": -1, // Minimum amount of leechers. Set to -1 for unlimited.
+  "maxleechers": -1, // Maximum amount of leechers. Set to -1 for unlimited.
+  "minsize": -1, // Minimum size in megabytes. Set to -1 for unlimited.
+  "maxsize": -1, // Maximum size in megabytes. Set to -1 for unlimited.
+  "discord": "", // Discord webhook URI. Optional.
+  "autodownload": "" // Automatically download .torrent files in a specified path. Optional.
+}
