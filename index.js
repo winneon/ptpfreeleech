@@ -143,8 +143,8 @@ try {
     let maxleechers = Number(config.maxleechers)
 
     // Parse user size configuration.
-    let minsize = Number(config.minsize) * 1024 * 1024
-    let maxsize = Number(config.maxsize) * 1024 * 1024
+    let minsize = config.minsize === -1 ? -1 : Number(config.minsize) * 1024 * 1024
+    let maxsize = config.maxsize === -1 ? -1 : Number(config.maxsize) * 1024 * 1024
 
     // Create download & permalink URLs for later use.
     let download = `https://passthepopcorn.me/torrents.php?action=download&id=${torrent.Id}&authkey=${authkey}&torrent_pass=${passkey}`
