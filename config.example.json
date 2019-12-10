@@ -1,7 +1,6 @@
 {
-  "username": "",
-  "password": "",
-  "passkey": "",
+  "apiuser": "",
+  "apikey": "",
   "minseeders": -1,
   "maxseeders": -1,
   "minleechers": -1,
