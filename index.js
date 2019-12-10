@@ -106,10 +106,11 @@ try {
   for (let group of data.Movies){
     let torrent = group.Torrents[0]
 
-    // Parse torrent seeder, leecher, and size information.
+    // Parse torrent information.
     let seeders = Number(torrent.Seeders)
     let leechers = Number(torrent.Leechers)
     let size = Number(torrent.Size)
+    let time = (new Date().getTime() - new Date(`${torrent.UploadTime} UTC`).getTime()) / 1000
 
     // Parse user seeder configuration.
     let minseeders = Number(config.minseeders)
@@ -122,6 +123,10 @@ try {
     // Parse user size configuration.
     let minsize = config.minsize === -1 ? -1 : Number(config.minsize) * 1024 * 1024
     let maxsize = config.maxsize === -1 ? -1 : Number(config.maxsize) * 1024 * 1024
+
+    // Parse user time configuration.
+    let mintime = Number(config.mintime)
+    let maxtime = Number(config.maxtime)
 
     // Create download & permalink URLs for later use.
     let download = `https://passthepopcorn.me/torrents.php?action=download&id=${torrent.Id}&authkey=${authkey}&torrent_pass=${passkey}`
@@ -136,76 +141,79 @@ try {
             if (maxleechers === -1 || leechers <= maxleechers){
               if (minsize === -1 || size >= minsize){
                 if (maxsize === -1 || size <= maxsize){
-
-                  // If discord webhook URI is present, log to Discord using an embed.
-                  if (config.discord){
-                    webhook.send(
-                      new discord.RichEmbed()
-                        .attachFile(new discord.Attachment(group.Cover, 'file.jpg'))
-                        .setAuthor('Freeleech Torrent', 'https://i.imgur.com/vBKpag5.png')
-                        .setDescription(group.Title)
-                        .setThumbnail('attachment://file.jpg')
-                        .addField('Source', torrent.Source, true)
-                        .addField('Codec', torrent.Codec, true)
-                        .addField('Resolution', torrent.Resolution, true)
-                        .addField('Size', formatBytes(torrent.Size), true)
-                        .addField('Seeders', torrent.Seeders, true)
-                        .addField('Leechers', torrent.Leechers, true)
-                        .addField('Torrent Permalink', `[Click Here](${permalink})`, true)
-                        .addField('Download URL', `[Click Here](${download})`, true)
-                    )
-                  }
-
-                  // If autodownload path is present, download torrent to specified path.
-                  if (config.autodownload){
-                    if (fs.existsSync(config.autodownload)){
-                      try {
-                        req = await request({
-                          method: 'GET',
-                          uri: download,
-                          resolveWithFullResponse: true
-                        })
-                      } catch (err){
-                        console.error('autodownload: The download request failed.')
-                        console.error(err)
+                  if (mintime === -1 || time >= mintime){
+                    if (maxtime === -1 || time <= maxtime){
+                      // If discord webhook URI is present, log to Discord using an embed.
+                      if (config.discord){
+                        webhook.send(
+                          new discord.RichEmbed()
+                            .attachFile(new discord.Attachment(group.Cover, 'file.jpg'))
+                            .setAuthor('Freeleech Torrent', 'https://i.imgur.com/vBKpag5.png')
+                            .setDescription(group.Title)
+                            .setThumbnail('attachment://file.jpg')
+                            .addField('Source', torrent.Source, true)
+                            .addField('Codec', torrent.Codec, true)
+                            .addField('Resolution', torrent.Resolution, true)
+                            .addField('Size', formatBytes(torrent.Size), true)
+                            .addField('Seeders', torrent.Seeders, true)
+                            .addField('Leechers', torrent.Leechers, true)
+                            .addField('Torrent Permalink', `[Click Here](${permalink})`, true)
+                            .addField('Download URL', `[Click Here](${download})`, true)
+                        )
                       }
 
-                      // Retrieve filename from existing response headers.
-                      let filename = req.headers['content-disposition'].split('filename=')[1].replace(/\"/g, '')
+                      // If autodownload path is present, download torrent to specified path.
+                      if (config.autodownload){
+                        if (fs.existsSync(config.autodownload)){
+                          try {
+                            req = await request({
+                              method: 'GET',
+                              uri: download,
+                              resolveWithFullResponse: true
+                            })
+                          } catch (err){
+                            console.error('autodownload: The download request failed.')
+                            console.error(err)
+                          }
 
-                      try {
-                        // Convert stream callbacks to a Promise for use with async/await.
-                        await new Promise((resolve, reject) => {
-                          let res = require('request')(download)
-                          let write = fs.createWriteStream(path.join(config.autodownload, filename))
+                          // Retrieve filename from existing response headers.
+                          let filename = req.headers['content-disposition'].split('filename=')[1].replace(/\"/g, '')
 
-                          write.on('error', reject)
+                          try {
+                            // Convert stream callbacks to a Promise for use with async/await.
+                            await new Promise((resolve, reject) => {
+                              let res = require('request')(download)
+                              let write = fs.createWriteStream(path.join(config.autodownload, filename))
 
-                          res.on('error', reject)
-                          res.on('end', resolve)
+                              write.on('error', reject)
 
-                          // Write response information to file.
-                          res.pipe(write)
-                        })
-                      } catch (err){
-                        console.error('autodownload: Could not write torrent file to path.')
-                        console.error(err)
+                              res.on('error', reject)
+                              res.on('end', resolve)
+
+                              // Write response information to file.
+                              res.pipe(write)
+                            })
+                          } catch (err){
+                            console.error('autodownload: Could not write torrent file to path.')
+                            console.error(err)
+                          }
+                        } else {
+                          config.autodownload = ''
+                          console.error('autodownload: Invalid path provided.')
+                        }
                       }
-                    } else {
-                      config.autodownload = ''
-                      console.error('autodownload: Invalid path provided.')
-                    }
-                  }
 
-                  // Add torrent ID to known freeleech cache.
-                  cache.freeleech.push(torrent.Id)
+                      // Add torrent ID to known freeleech cache.
+                      cache.freeleech.push(torrent.Id)
 
-                  // Log torrent permalink & download URL to the console.
-                  console.log(
+                      // Log torrent permalink & download URL to the console.
+                      console.log(
 `
 Torrent Permalink: ${permalink}
 Torrent Download: ${download}`
-                  )
+                      )
+                    }
+                  }
                 }
               }
             }

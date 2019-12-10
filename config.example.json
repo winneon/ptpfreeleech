@@ -7,6 +7,8 @@
   "maxleechers": -1,
   "minsize": -1,
   "maxsize": -1,
+  "mintime": -1,
+  "maxtime": -1,
   "discord": "",
   "autodownload": ""
 }

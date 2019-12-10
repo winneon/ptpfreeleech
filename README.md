@@ -34,12 +34,14 @@ Below is an example `config.example.json`. Rename `config.example.json` to `conf
 {
   "apiuser": "", // PassThePopcorn ApiUser credential.
   "apikey": "", // PassThePopcorn ApiKey credential.
-  "minseeders": -1, // Minimum amount of seeders. Set to -1 for unlimited.
-  "maxseeders": -1, // Maximum amount of seeders. Set to -1 for unlimited.
-  "minleechers": -1, // Minimum amount of leechers. Set to -1 for unlimited.
-  "maxleechers": -1, // Maximum amount of leechers. Set to -1 for unlimited.
-  "minsize": -1, // Minimum size in megabytes. Set to -1 for unlimited.
-  "maxsize": -1, // Maximum size in megabytes. Set to -1 for unlimited.
+  "minseeders": -1, // Minimum amount of seeders. Set to -1 to ignore.
+  "maxseeders": -1, // Maximum amount of seeders. Set to -1 to ignore.
+  "minleechers": -1, // Minimum amount of leechers. Set to -1 to ignore.
+  "maxleechers": -1, // Maximum amount of leechers. Set to -1 to ignore.
+  "minsize": -1, // Minimum size in megabytes. Set to -1 to ignore.
+  "maxsize": -1, // Maximum size in megabytes. Set to -1 to ignore.
+  "mintime": -1, // Minimum upload time from current time in seconds. Set to -1 to ignore.
+  "maxtime": -1, // Maximum upload time from current time in seconds. Set to -1 to ignore.
   "discord": "", // Discord webhook URI. Optional.
   "autodownload": "" // Automatically download .torrent files in a specified path. Optional.
 }
