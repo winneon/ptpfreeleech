@@ -32,9 +32,8 @@ Below is an example `config.example.json`. Rename `config.example.json` to `conf
 
 ```javascript
 {
-  "username": "", // PassThePopcorn username credential.
-  "password": "", // PassThePopcorn password credential.
-  "passkey": "", // PassThePopcorn passkey credential. View on your profile in the Personal section.
+  "apiuser": "", // PassThePopcorn ApiUser credential.
+  "apikey": "", // PassThePopcorn ApiKey credential.
   "minseeders": -1, // Minimum amount of seeders. Set to -1 for unlimited.
   "maxseeders": -1, // Maximum amount of seeders. Set to -1 for unlimited.
   "minleechers": -1, // Minimum amount of leechers. Set to -1 for unlimited.
